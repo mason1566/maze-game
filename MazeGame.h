@@ -5,10 +5,12 @@
 
 class MazeGame {
 public:
-    MazeGame(Maze maze);
+    MazeGame();
+
+    Maze* CreateMaze();
 
 private:
-    Maze _maze;
+    Maze* _maze;
 };
 
 #endif
