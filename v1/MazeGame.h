@@ -1,6 +1,9 @@
-#include "MazeGame.h"
+#ifndef MAZEGAME
+#define MAZEGAME
 
-#define VERSION 1
+#include "Maze.h"
+
+#define VERSION 2
 
 #if VERSION == 1
 
@@ -13,6 +16,16 @@
     The creational patterns show how to make this design more flexible, not necessarily smaller.
     In particular, they will make it easy to change the classes that define the components of a maze.
 */
+
+class MazeGame {
+public:
+    MazeGame();
+
+    Maze* CreateMaze();
+
+private:
+    Maze* _maze;
+};
 
 Maze* MazeGame::CreateMaze() {
     Maze* aMaze = new Maze;
@@ -42,6 +55,81 @@ Maze* MazeGame::CreateMaze() {
     redefining those virtual functions. This approach is an example of the Factory Method pattern.
 */
 
+class MazeGame {
+public:
+    Maze* CreateMaze();
+
+// factory methods:
+
+    virtual Maze* MakeMaze() const { return new Maze; };
+    virtual Room* MakeRoom(int n) const { return new Room(n); };
+    virtual Wall* MakeWall() const { return new Wall; };
+    virtual Door* MakeDoor(Room* r1, Room* r2) const { return new Door(r1, r2); };
+};
+
+/* Now we can rewrite CreateMaze to use these factory methods: */
+Maze* MazeGame::CreateMaze() {
+    Maze* aMaze = MakeMaze();
+    
+    Room* r1 = MakeRoom(1);
+    Room* r2 = MakeRoom(2);
+    Door* theDoor = MakeDoor(r1, r2);
+
+    aMaze->AddRoom(r1);
+    aMaze->AddRoom(r2);
+
+    r1->SetSide(North, MakeWall());
+    r1->SetSide(East, theDoor);
+    r1->SetSide(South, MakeWall());
+    r1->SetSide(West, MakeWall());
+
+    r2->SetSide(North, MakeWall());
+    r2->SetSide(East, MakeWall());
+    r2->SetSide(South, MakeWall());
+    r2->SetSide(West, theDoor);
+
+    return aMaze;
+};
+
+/*
+    Different games can subclass MazeGame to specialize parts of the maze. MazeGame subclasses can redefine some
+    or all of the factory methods to specify variations in products.
+*/
+
+class BombedWall : public Wall {
+public:
+    BombedWall();
+
+    virtual void Enter();
+};
+
+class RoomWithABomb : public Room {
+public:
+    RoomWithABomb(int roomNo);
+
+    virtual void Enter();
+};
+
+// BombedMazeGame can redefine the Room and Wall products to return the bombed varieties:
+class BombedMazeGame : public MazeGame {
+public:
+    BombedMazeGame();
+
+    virtual Wall* MakeWall() const { return new BombedWall; };
+    virtual Room* MakeRoom(int n) const { return new RoomWithABomb(n); };
+};
+
+/* An EnchantedMazeGame variant might be defined like this:
+    class EnchantedMazeGame : public MazeGame {
+    public:
+        EnchantedMazeGame();
+
+        virtual Room* MakeRoom(int n) const { return new EnchantedRoom(n, CastSpell()); }
+        virtual Door* MakeDoor(Room* r1, Room* r2) const { return new DoorNeedingSpell(r1, r2); }
+    protected:
+        Spell* CastSpell() const;
+    }
+*/
 
 #elif VERSION == 3
 
@@ -78,4 +166,6 @@ Maze* MazeGame::CreateMaze() {
 */
 
 #else
+#endif
+
 #endif
