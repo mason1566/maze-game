@@ -4,7 +4,7 @@
 
 #if VERSION == 1
 
-/* 
+/* HARDCODED MAZE
     This function is pretty complicated, considering that all it does is create a maze with two rooms.
     The real problem with this member funciton isn't its size but its inflexibility.
     Changing the layout means changing this member function, either by overriding it, which means reimplementing
@@ -35,5 +35,47 @@ Maze* MazeGame::CreateMaze() {
 };
 
 #elif VERSION == 2
+
+/* FACTORY METHOD
+    If CreateMaze calls virtual functions instead of constructor calls to create the rooms, walls,and doors 
+    it requires, then you can change the classes that get instantiated by making a subclass of MazeGame and
+    redefining those virtual functions. This approach is an example of the Factory Method pattern.
+*/
+
+
+#elif VERSION == 3
+
+/* ABSTRACT FACTORY
+    If CreateMaze is passed an object as a parameter to use to create rooms, walls, and doors, then you can
+    change the classes of rooms, walls, and doors by passing a different parameter. This is an example of the
+    Abstract Factory pattern.
+*/
+
+
+#elif VERSION == 4
+
+/* BUILDER
+    If CreateMaze is passed an object that can create a new maze in its entirety using operations for adding
+    rooms, doors, and walls to the maze it builds, then you can use inheritance to change parts of the maze
+    or the way the maze is built. This is an example of the Builder pattern.
+*/
+
+
+#elif VERSION == 5
+
+/* PROTOTYPE
+    if CrateMaze is parameterized by various prototypical room, door, and wall objects, which it then copies and
+    adds to the maze, then you can change the maze's composition by replacing these prototypical objects with
+    different ones. This is an example of the Prototype pattern.
+*/
+
+#elif VERSION == 6
+
+/*SINGLETON
+    The remaining creational pattern, Singleton, can ensure there's only one maze per game and that all game
+    objects have ready access to it, without resorting to global variables or functions. Singleton also makes it
+    easy to extend or replace the maze without touching existing code.
+*/
+
 #else
 #endif
