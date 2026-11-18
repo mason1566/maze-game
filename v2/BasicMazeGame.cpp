@@ -1,5 +1,11 @@
 #include "BasicMazeGame.h"
 
+#include "MapSite.h"
+
+BasicMazeGame::BasicMazeGame() {
+    this->_currentRoom = nullptr;
+}
+
 Maze* BasicMazeGame::CreateMaze() {
     Maze* aMaze = new Maze;
     Room* r1 = new Room(1);
@@ -18,6 +24,8 @@ Maze* BasicMazeGame::CreateMaze() {
     r2->SetSide(East, new Wall);
     r2->SetSide(South, new Wall);
     r2->SetSide(West, theDoor);
+
+    return aMaze;
 };
 
 void BasicMazeGame::Move(Direction direction) {

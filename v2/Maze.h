@@ -6,7 +6,7 @@
 
 class Maze {
 public:
-    Maze();
+    Maze() {};
 
     void AddRoom(Room* room) { _rooms.push_back(room); }
     // Room* RoomNo(int) const;

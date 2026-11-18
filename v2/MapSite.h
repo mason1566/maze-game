@@ -1,19 +1,23 @@
 #ifndef MAPSITE
 #define MAPSITE
 
+#include <string>
 #include "Direction.h"
 
 class MapSite {
 public:
     virtual void Enter() = 0;
+    std::string GetDescription() { return this->_description; }
+protected:
+    std::string _description = "";
 };
 
 class Room : public MapSite {
 public:
     Room(int roomNo);
 
-    MapSite* GetSide(Direction) const;
     void SetSide(Direction, MapSite*);
+    MapSite* GetSide(Direction) const;
 
     virtual void Enter();
 
@@ -34,7 +38,6 @@ public:
     Door(Room* = 0, Room* = 0);
 
     virtual void Enter();
-    Room* OtherSideFrom(Room*);
 
 private:
     Room* _room1;
